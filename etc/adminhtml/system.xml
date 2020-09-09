@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config:etc/system_file.xsd">
+    <system>asfasdf
+        <section id="payment" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="ccvonlinepayments" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label><![CDATA[<div class="ccvonlinepayments-logo"></div><div class="ccvonlinepayments-byline">CCV Online Payments</div>]]></label>
+                <fieldset_css>complex ccvonlinepayments-section</fieldset_css>
+                <group id="ccvonlinepayments_general" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>General</label>
+                    <field id="api_key" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Api Key</label>
+                    </field>
+                    <field id="order_status_payment_pending" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Pending status</label>
+                        <source_model>CCVOnlinePayments\Magento\State\PaymentPending</source_model>
+                        <comment>Set the state of the order before the payment is complete</comment>
+                    </field>
+                    <field id="order_status_processing" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Processing status</label>
+                        <source_model>CCVOnlinePayments\Magento\State\Processing</source_model>
+                        <comment>Set the state of the order after the payment is complete</comment>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Ideal</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_card_bcmc" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bancontact</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_card_maestro" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maestro</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_card_mastercard" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mastercard</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_card_visa" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Visa</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Paypal</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_card_amex" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>American Expresss</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_sofort" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sofort</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_giropay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Giropay</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_banktransfer" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Banktransfer</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_eps" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Eps</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_payconiq" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Payconiq</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="ccvonlinepayments_terminal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Terminal</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

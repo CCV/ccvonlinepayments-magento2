@@ -1,0 +1,18 @@
+"Your payment is still pending.","Uw betaling wordt nog verwerkt."
+"There was an error processing the payment.","Er ging iets mis met het verwerken van uw betaling."
+"Choose your bank...","Kies uw bank..."
+"Ccv Online Payments","Ccv Online Payments"
+General,Algemeen
+"Api Key","Api Key"
+"Pending status","Pending status"
+"Processing status","Processing status"
+Banktransfer,Bank overboeking
+Enabled,Actief
+Card,Creditcard
+Eps,Eps
+Giropay,Giropay
+Ideal,Ideal
+Payconiq,Payconiq
+Paypal,Paypal
+Sofort,Sofort
+Terminal,Terminal
