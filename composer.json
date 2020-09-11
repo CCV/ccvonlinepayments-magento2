@@ -2,7 +2,7 @@
   "name": "ccvonlinepayments/magento2",
   "description": "CCVOnlinePayments for Magento2",
   "type": "magento2-module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "require": {
     "php": "~7.2||~7.3||~7.4",
     "ccvonlinepayments/lib": "^1.0",

@@ -11,7 +11,11 @@ class PaymentReturn extends Action {
     {
         $paymentStatus = $this->handlePaymentStatus();
 
-        if($paymentStatus->getStatus() === PaymentStatus::STATUS_SUCCESS) {
+        if($paymentStatus === null) {
+            $this->session->restoreQuote();
+            $this->messageManager->addErrorMessage(__("There was an unexpected error processing your payment"));
+            $this->_redirect('checkout/cart');
+        }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_SUCCESS) {
             $this->session->start();
             $this->_redirect('checkout/onepage/success');
         }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_PENDING) {
@@ -22,7 +26,6 @@ class PaymentReturn extends Action {
             $this->session->restoreQuote();
             $this->messageManager->addErrorMessage(__('There was an error processing the payment.'));
             $this->_redirect('checkout/cart');
-            return;
         }
     }
 }

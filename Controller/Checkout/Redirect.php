@@ -1,5 +1,6 @@
 <?php namespace CCVOnlinePayments\Magento\Controller\Checkout;
 
+use CCVOnlinePayments\Lib\Exception\ApiException;
 use CCVOnlinePayments\Lib\PaymentRequest;
 use CCVOnlinePayments\Magento\CcvOnlinePaymentsService;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
@@ -139,7 +140,12 @@ class Redirect extends Action {
         $remote = $objctManager->get('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress');
         $paymentRequest->setBrowserIpAddress($remote->getRemoteAddress());
 
-        $paymentResponse = $ccvOnlinePaymentsApi->createPayment($paymentRequest);
+        try {
+            $paymentResponse = $ccvOnlinePaymentsApi->createPayment($paymentRequest);
+        }catch(ApiException $apiException) {
+            $this->_redirect($this->_url->getUrl('ccvonlinepayments/checkout/paymentreturn/',["order_id" => $order->getIncrementId(), "payment_id" => $payment->getId()]));
+            return;
+        }
 
         $payment->setCcvonlinepaymentsReference($paymentResponse->getReference());
         $this->orderPaymentRepository->save($payment);

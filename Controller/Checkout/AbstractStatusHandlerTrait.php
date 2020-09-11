@@ -56,6 +56,9 @@ trait AbstractStatusHandlerTrait {
         $payment = $order->getPaymentById($this->getRequest()->getParam("payment_id"));
 
         $reference = $payment->getCcvonlinepaymentsReference();
+        if($reference === null) {
+            return null;
+        }
 
         $ccvOnlinePaymentsApi = $this->ccvOnlinePaymentsService->getApi();
         $paymentStatus = $ccvOnlinePaymentsApi->getPaymentStatus($reference);
