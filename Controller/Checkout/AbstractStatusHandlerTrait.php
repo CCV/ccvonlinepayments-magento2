@@ -67,6 +67,7 @@ trait AbstractStatusHandlerTrait {
             if(!$payment->getIsTransactionClosed()) {
                 if (abs($order->getTotalDue() - $paymentStatus->getAmount()) < 0.01) {
                     $payment->setIsTransactionClosed(true);
+                    $payment->setTransactionId($reference);
                     $payment->registerCaptureNotification($paymentStatus->getAmount(), true);
                     $this->orderPaymentRepository->save($payment);
 
