@@ -1,12 +1,14 @@
 {
   "name": "ccv/magento2",
-  "description": "CCVOnlinePayments for Magento2",
-  "homepage": "https://www.ccv.eu/nl/betaaloplossingen/betaaloplossingen-online/ccv-online-payments/",
+  "description": "Official CCV Payment Services plugin for Magento 2",
+  "keywords": ["plugin", "payments", "magento-2", "ccv"],
+  "homepage": "https://github.com/CCV/ccvonlinepayments-magento2",
   "type": "magento2-module",
-  "version": "1.2.0",
+  "license": "MIT",
+  "version": "1.2.1",
   "require": {
     "php": "~7.2||~7.3||~7.4",
-    "ccv/lib": "^1.2",
+    "ccv/php-lib": "^1.2.1",
     "magento/framework": "^102.0.0|^103.0.0",
     "magento/module-payment": "^100.3.0"
   },
@@ -19,23 +21,5 @@
       "CCVOnlinePayments\\Magento\\Controller\\": "Controller",
       "CCVOnlinePayments\\Magento\\": "src"
     }
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://repo.magento.com/"
-    },
-    {
-      "type": "path",
-      "url": "../lib/"
-    },
-    {
-      "type": "path",
-      "url": "../images/"
-    },
-    {
-      "type": "path",
-      "url": "../magento/"
-    }
-  ]
+  }
 }
