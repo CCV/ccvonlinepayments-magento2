@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Config:etc/system_file.xsd">
-    <system>asfasdf
+    <system>
         <section id="payment" showInDefault="1" showInWebsite="1" showInStore="1">
             <group id="ccvonlinepayments" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label><![CDATA[<div class="ccvonlinepayments-logo"></div><div class="ccvonlinepayments-byline">CCV Online Payments</div>]]></label>
