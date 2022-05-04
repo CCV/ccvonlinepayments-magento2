@@ -61,6 +61,18 @@
                 <is_offline>0</is_offline>
                 <sort_order>4</sort_order>
             </ccvonlinepayments_card_visa>
+            <ccvonlinepayments_klarna>
+                <model>CcvOnlinePaymentsMagentoMethodKlarna</model>
+                <title>Klarna</title>
+                <payment_action>authorize_capture</payment_action>
+                <is_gateway>0</is_gateway>
+                <can_order>1</can_order>
+                <can_capture>1</can_capture>
+                <can_authorize>1</can_authorize>
+                <can_use_checkout>1</can_use_checkout>
+                <is_offline>0</is_offline>
+                <sort_order>5</sort_order>
+            </ccvonlinepayments_klarna>
             <ccvonlinepayments_paypal>
                 <model>CcvOnlinePaymentsMagentoMethodPaypal</model>
                 <title>Paypal</title>
@@ -71,7 +83,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>5</sort_order>
+                <sort_order>6</sort_order>
             </ccvonlinepayments_paypal>
             <ccvonlinepayments_card_amex>
                 <model>CcvOnlinePaymentsMagentoMethodCardAmex</model>
@@ -83,7 +95,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>6</sort_order>
+                <sort_order>7</sort_order>
             </ccvonlinepayments_card_amex>
             <ccvonlinepayments_sofort>
                 <model>CcvOnlinePaymentsMagentoMethodSofort</model>
@@ -95,7 +107,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>7</sort_order>
+                <sort_order>8</sort_order>
             </ccvonlinepayments_sofort>
             <ccvonlinepayments_giropay>
                 <model>CcvOnlinePaymentsMagentoMethodGiropay</model>
@@ -107,7 +119,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>8</sort_order>
+                <sort_order>9</sort_order>
             </ccvonlinepayments_giropay>
             <ccvonlinepayments_banktransfer>
                 <model>CcvOnlinePaymentsMagentoMethodBanktransfer</model>
@@ -119,7 +131,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>9</sort_order>
+                <sort_order>10</sort_order>
             </ccvonlinepayments_banktransfer>
             <ccvonlinepayments_eps>
                 <model>CcvOnlinePaymentsMagentoMethodEps</model>
@@ -131,7 +143,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>10</sort_order>
+                <sort_order>11</sort_order>
             </ccvonlinepayments_eps>
 
 
@@ -145,7 +157,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>11</sort_order>
+                <sort_order>12</sort_order>
             </ccvonlinepayments_payconiq>
 
 
@@ -159,7 +171,7 @@
                 <can_authorize>0</can_authorize>
                 <can_use_checkout>1</can_use_checkout>
                 <is_offline>0</is_offline>
-                <sort_order>12</sort_order>
+                <sort_order>13</sort_order>
             </ccvonlinepayments_terminal>
         </payment>
     </default>

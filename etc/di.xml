@@ -68,7 +68,36 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="CcvOnlinePaymentsMagentoMethodKlarna" type="CCVOnlinePayments\Magento\Method\Klarna">
+        <arguments>
+            <argument name="code" xsi:type="string">ccvonlinepayments_klarna</argument>
+            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolKlarna</argument>
+            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+        </arguments>
+    </virtualType>
 
+    <virtualType name="CCVOnlinePaymentsValueHandlerPoolKlarna" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerKlarna</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsValueHandlerKlarna" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigKlarna</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsConfigKlarna" type="CCVOnlinePayments\Magento\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">ccvonlinepayments_klarna</argument>
+            <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="CcvOnlinePaymentsMagentoMethodCardMaestro" type="CCVOnlinePayments\Magento\Method\CardMaestro">
         <arguments>

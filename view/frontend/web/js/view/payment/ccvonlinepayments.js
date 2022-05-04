@@ -37,6 +37,9 @@ define(
                 type: 'ccvonlinepayments_ideal',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{
+                type: 'ccvonlinepayments_klarna',
+                component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
+            },{
                 type: 'ccvonlinepayments_payconiq',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{
