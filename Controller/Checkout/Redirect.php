@@ -111,7 +111,7 @@ class Redirect extends Action {
             $paymentRequest->setBrand($additionalInformation['selectedIssuer'] ?? null);
         }
 
-        $paymentRequest->setScaReady(true);
+        $paymentRequest->setScaReady(false);
 
         $billingCountryCode = $this->countryInformation->getCountryInfo($order->getBillingAddress()->getCountryId())->getTwoLetterAbbreviation();
         $paymentRequest->setBillingAddress($order->getBillingAddress()->getStreetLine(1));
