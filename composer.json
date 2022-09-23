@@ -5,9 +5,9 @@
   "homepage": "https://github.com/CCV/ccvonlinepayments-magento2",
   "type": "magento2-module",
   "license": "MIT",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "require": {
-    "php": "~7.2||~7.3||~7.4",
+    "php": ">7.2,<8.1.999",
     "ccv/php-lib": "^1.2.1",
     "magento/framework": "^102.0.0|^103.0.0",
     "magento/module-payment": "^100.3.0"
