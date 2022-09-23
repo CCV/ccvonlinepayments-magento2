@@ -53,9 +53,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
             );
         }
 
-        $stderr = fopen('php://stderr', 'w');
-        \fwrite($stderr, $this->methodCode.".".$field."($storeId): ".$value."\n");
-
         return $value;
     }
 
