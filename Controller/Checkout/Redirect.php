@@ -124,6 +124,9 @@ class Redirect extends Action {
         $paymentRequest->setScaReady(false);
 
         $billingCountryCode = $this->countryInformation->getCountryInfo($order->getBillingAddress()->getCountryId())->getTwoLetterAbbreviation();
+        $paymentRequest->setBillingEmail($order->getBillingAddress()->getEmail());
+        $paymentRequest->setBillingFirstName($order->getBillingAddress()->getFirstName());
+        $paymentRequest->setBillingLastName($order->getBillingAddress()->getLastName());
         $paymentRequest->setBillingAddress($order->getBillingAddress()->getStreetLine(1));
         $paymentRequest->setBillingCity($order->getBillingAddress()->getCity());
         $paymentRequest->setBillingPostalCode($order->getBillingAddress()->getPostcode());
@@ -132,6 +135,9 @@ class Redirect extends Action {
         $paymentRequest->setBillingPhoneNumber($order->getBillingAddress()->getTelephone());
 
         $shippingCountryCode = $this->countryInformation->getCountryInfo($order->getShippingAddress()->getCountryId())->getTwoLetterAbbreviation();
+        $paymentRequest->setShippingEmail($order->getShippingAddress()->getEmail());
+        $paymentRequest->setShippingFirstName($order->getShippingAddress()->getFirstName());
+        $paymentRequest->setShippingLastName($order->getShippingAddress()->getLastName());
         $paymentRequest->setShippingAddress($order->getShippingAddress()->getStreetLine(1));
         $paymentRequest->setShippingCity($order->getShippingAddress()->getCity());
         $paymentRequest->setShippingPostalCode($order->getShippingAddress()->getPostcode());
