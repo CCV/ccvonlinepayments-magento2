@@ -9,9 +9,6 @@ class PaymentDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        var_dump($buildSubject);
-        die();
-
         $result = [];
 
         return $result;
