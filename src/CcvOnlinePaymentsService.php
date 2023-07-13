@@ -10,6 +10,8 @@ use Magento\Framework\Module\ModuleListInterface;
 class CcvOnlinePaymentsService
 {
 
+    private const VERSION = "1.3.1";
+
     private $config;
     private $cache;
     private $logger;
@@ -40,7 +42,7 @@ class CcvOnlinePaymentsService
 
             $this->api = new CcvOnlinePaymentsApi(new Cache($this->cache), $this->logger, $apiKey);
             $this->api->setMetadata([
-                "CCVOnlinePayments" => $this->moduleList->getOne('CCVOnlinePayments_Magento')['setup_version'],
+                "CCVOnlinePayments" => self::VERSION,
                 "Magento"           => $productMetadata->getVersion()
             ]);
         }
