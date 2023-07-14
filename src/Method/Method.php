@@ -187,16 +187,23 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         $orderLines = [];
 
         foreach($invoice->getItems() as $item) {
-            $orderLine = new OrderLine();
-            $orderLine->setType(OrderLine::TYPE_PHYSICAL);
-            $orderLine->setName($item->getName());
-            $orderLine->setQuantity(round($item->getQty()));
-            $orderLine->setTotalPrice($item->getRowTotal() - $item->getDiscountAmount() + $item->getTaxAmount() + $item->getDiscountTaxCompensationAmount());
-            $orderLine->setUnit("pcs");
-            $orderLine->setUnitPrice($orderLine->getTotalPrice()/$orderLine->getQuantity());
-            $orderLine->setVatRate(($item->getTaxAmount() / $orderLine->getTotalPrice()) * 100 );
-            $orderLine->setVat($item->getTaxAmount());
-            $orderLines[] = $orderLine;
+            $totalPrice = $item->getRowTotal() - $item->getDiscountAmount() + $item->getTaxAmount() + $item->getDiscountTaxCompensationAmount();
+            if(abs($totalPrice) > 0.0001) {
+                $orderLine = new OrderLine();
+                $orderLine->setType(OrderLine::TYPE_PHYSICAL);
+                $orderLine->setName($item->getName());
+                $orderLine->setQuantity(round($item->getQty()));
+                if($orderLine->getQuantity() < 1) {
+                    $orderLine->setQuantity(1);
+                }
+
+                $orderLine->setTotalPrice($totalPrice);
+                $orderLine->setUnit("pcs");
+                $orderLine->setUnitPrice($orderLine->getTotalPrice()/$orderLine->getQuantity());
+                $orderLine->setVatRate(($item->getTaxAmount() / $orderLine->getTotalPrice()) * 100 );
+                $orderLine->setVat($item->getTaxAmount());
+                $orderLines[] = $orderLine;
+            }
         }
 
         $totalShippingAmount = $invoice->getShippingAmount() + $invoice->getShippingTaxAmount() + $invoice->getShippingDiscountTaxCompensationAmount();
