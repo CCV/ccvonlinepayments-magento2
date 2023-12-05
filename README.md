@@ -11,6 +11,24 @@ Official CCV Payment Services plugin for Magento 2.
 
 # 3. Installing the plugin into your web shop
 
+from CMD line:
+1. composer require ccv/magento2
+2. php bin/magento module:enable --clear-static-content CCVOnlinePayments_Magento
+3. php bin/magento setup:upgrade
+4. php bin/magento cache:clean
+5. php bin/magento indexer:reindex
+
+in Magento Admin:
+
+1. Click on Stores
+2. Click on Configuration
+3. Click on Sales
+4. Click on Payment Methodes
+5. Open Other Payment methods
+6. Open  CCV Online Payments
+7. Open General
+8. 
+
 Manuals are available on the [CCV web site](https://www.ccv.eu/nl/service/support/handleidingen).
 
 # 4. Support
