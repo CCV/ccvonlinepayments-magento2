@@ -27,7 +27,9 @@ in Magento Admin:
 5. Open Other Payment methods
 6. Open  CCV Online Payments
 7. Open General
-8. 
+8. Get your LIVE API key from your MyCCV account*
+9. Enter the API key
+10. Open 
 
 Manuals are available on the [CCV web site](https://www.ccv.eu/nl/service/support/handleidingen).
 
