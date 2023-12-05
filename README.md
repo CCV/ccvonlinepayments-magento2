@@ -31,7 +31,8 @@ in Magento Admin:
 9. Enter the API key
 10. Openand activate the desired payment methods
 11. Click on Save Config
-    
+
+*The live API key is released after successful boarding by CCV Online Payments.
 
 Manuals are available on the [CCV web site](https://www.ccv.eu/nl/service/support/handleidingen).
 
