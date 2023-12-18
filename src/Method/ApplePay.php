@@ -8,8 +8,8 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Psr\Log\LoggerInterface;
 
-class Payconiq extends Method {
+class ApplePay extends Method {
 
-    protected $_code = 'ccvonlinepayments_payconiq';
+    protected $_code = 'ccvonlinepayments_applepay';
 
 }
