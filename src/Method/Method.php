@@ -107,8 +107,14 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
     {
         parent::assignData($data);
 
-        foreach($data->getAdditionalData() as $key => $value) {
-            $this->getInfoInstance()->setAdditionalInformation($key, $value);
+        $additionalData = $data->getAdditionalData();
+
+        if (isset($additionalData['selectedIssuer'])) {
+            $this->getInfoInstance()->setAdditionalInformation('selectedIssuer', $additionalData['selectedIssuer']);
+        }
+
+        if (isset($additionalData['issuerKey'])) {
+            $this->getInfoInstance()->setAdditionalInformation('issuerKey', $additionalData['issuerKey']);
         }
 
         return $this;
