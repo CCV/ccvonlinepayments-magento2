@@ -37,16 +37,16 @@ define(
                 type: 'ccvonlinepayments_ideal',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{
-                type: 'ccvonlinepayments_payconiq',
+                type: 'ccvonlinepayments_applepay',
+                component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
+            },{
+                type: 'ccvonlinepayments_klarna',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{
                 type: 'ccvonlinepayments_paypal',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{
                 type: 'ccvonlinepayments_sofort',
-                component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
-            },{
-                type: 'ccvonlinepayments_terminal',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             }
         );

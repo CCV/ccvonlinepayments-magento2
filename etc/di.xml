@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <virtualType name="CcvOnlinePaymentsMagentoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CcvOnlinePaymentsMagentoCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+        </arguments>
+    </virtualType>
 
 
     <virtualType name="CcvOnlinePaymentsMagentoMethodIdeal" type="CCVOnlinePayments\Magento\Method\Ideal">
@@ -10,6 +23,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolIdeal</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -34,6 +49,39 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="CcvOnlinePaymentsMagentoMethodApplePay" type="CCVOnlinePayments\Magento\Method\ApplePay">
+        <arguments>
+            <argument name="code" xsi:type="string">ccvonlinepayments_applepay</argument>
+            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolApplePay</argument>
+            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsValueHandlerPoolApplePay" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerApplePay</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsValueHandlerApplePay" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigApplePay</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsConfigApplePay" type="CCVOnlinePayments\Magento\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">ccvonlinepayments_applepay</argument>
+            <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
+        </arguments>
+    </virtualType>
+
 
 
 
@@ -44,6 +92,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolCardBcmc</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -68,7 +118,38 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="CcvOnlinePaymentsMagentoMethodKlarna" type="CCVOnlinePayments\Magento\Method\Klarna">
+        <arguments>
+            <argument name="code" xsi:type="string">ccvonlinepayments_klarna</argument>
+            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolKlarna</argument>
+            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
+        </arguments>
+    </virtualType>
 
+    <virtualType name="CCVOnlinePaymentsValueHandlerPoolKlarna" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerKlarna</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsValueHandlerKlarna" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigKlarna</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsConfigKlarna" type="CCVOnlinePayments\Magento\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">ccvonlinepayments_klarna</argument>
+            <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="CcvOnlinePaymentsMagentoMethodCardMaestro" type="CCVOnlinePayments\Magento\Method\CardMaestro">
         <arguments>
@@ -77,6 +158,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolCardMaestro</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -109,6 +192,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolCardMastercard</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -141,6 +226,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolCardVisa</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -173,6 +260,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolCardAmex</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -207,16 +296,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolBanktransfer</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CcvOnlinePaymentsMagentoMethodEps" type="CCVOnlinePayments\Magento\Method\Eps">
-        <arguments>
-            <argument name="code" xsi:type="string">ccvonlinepayments_eps</argument>
-            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
-            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolEps</argument>
-            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -227,16 +308,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolGiropay</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CcvOnlinePaymentsMagentoMethodPayconiq" type="CCVOnlinePayments\Magento\Method\Payconiq">
-        <arguments>
-            <argument name="code" xsi:type="string">ccvonlinepayments_payconiq</argument>
-            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
-            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolPayconiq</argument>
-            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -247,6 +320,8 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolPaypal</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
 
@@ -257,20 +332,10 @@
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolSofort</argument>
             <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="CcvOnlinePaymentsMagentoMethodTerminal" type="CCVOnlinePayments\Magento\Method\Terminal">
-        <arguments>
-            <argument name="code" xsi:type="string">ccvonlinepayments_terminal</argument>
-            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
-            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolTerminal</argument>
-            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
-        </arguments>
-    </virtualType>
-
-
 
 
     <virtualType name="CCVOnlinePaymentsValueHandlerPoolBanktransfer" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
@@ -294,27 +359,6 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="CCVOnlinePaymentsValueHandlerPoolEps" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerEps</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CCVOnlinePaymentsValueHandlerEps" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
-        <arguments>
-            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigEps</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CCVOnlinePaymentsConfigEps" type="CCVOnlinePayments\Magento\Config">
-        <arguments>
-            <argument name="methodCode" xsi:type="string">ccvonlinepayments_eps</argument>
-        </arguments>
-    </virtualType>
-
-
     <virtualType name="CCVOnlinePaymentsValueHandlerPoolGiropay" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -332,28 +376,6 @@
     <virtualType name="CCVOnlinePaymentsConfigGiropay" type="CCVOnlinePayments\Magento\Config">
         <arguments>
             <argument name="methodCode" xsi:type="string">ccvonlinepayments_giropay</argument>
-            <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
-        </arguments>
-    </virtualType>
-
-
-    <virtualType name="CCVOnlinePaymentsValueHandlerPoolPayconiq" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerPayconiq</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CCVOnlinePaymentsValueHandlerPayconiq" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
-        <arguments>
-            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigPayconiq</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CCVOnlinePaymentsConfigPayconiq" type="CCVOnlinePayments\Magento\Config">
-        <arguments>
-            <argument name="methodCode" xsi:type="string">ccvonlinepayments_payconiq</argument>
             <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
         </arguments>
     </virtualType>
@@ -398,28 +420,6 @@
     <virtualType name="CCVOnlinePaymentsConfigSofort" type="CCVOnlinePayments\Magento\Config">
         <arguments>
             <argument name="methodCode" xsi:type="string">ccvonlinepayments_sofort</argument>
-            <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
-        </arguments>
-    </virtualType>
-
-
-    <virtualType name="CCVOnlinePaymentsValueHandlerPoolTerminal" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerTerminal</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CCVOnlinePaymentsValueHandlerTerminal" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
-        <arguments>
-            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigTerminal</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="CCVOnlinePaymentsConfigTerminal" type="CCVOnlinePayments\Magento\Config">
-        <arguments>
-            <argument name="methodCode" xsi:type="string">ccvonlinepayments_terminal</argument>
             <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
         </arguments>
     </virtualType>

@@ -1,10 +1,12 @@
 <?php namespace CCVOnlinePayments\Magento\Controller\Checkout;
 
 use CCVOnlinePayments\Lib\Exception\ApiException;
+use CCVOnlinePayments\Lib\OrderLine;
 use CCVOnlinePayments\Lib\PaymentRequest;
 use CCVOnlinePayments\Magento\CcvOnlinePaymentsService;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -85,14 +87,22 @@ class Redirect extends Action {
         $ccvOnlinePaymentsApi = $this->ccvOnlinePaymentsService->getApi();
 
         $payment = $order->getPayment();
+        $methodId = str_replace("ccvonlinepayments_","",$payment->getMethod());
+        $method = $ccvOnlinePaymentsApi->getMethodById($methodId);
 
         $paymentRequest = new PaymentRequest();
         $paymentRequest->setCurrency($order->getOrderCurrencyCode());
         $paymentRequest->setAmount($payment->getAmountOrdered());
 
+        if($method->isTransactionTypeAuthoriseSupported()) {
+            $paymentRequest->setTransactionType(PaymentRequest::TRANSACTION_TYPE_AUTHORIZE);
+        }else{
+            $paymentRequest->setTransactionType(PaymentRequest::TRANSACTION_TYPE_SALE);
+        }
+
         $paymentRequest->setReturnUrl($this->_url->getUrl('ccvonlinepayments/checkout/paymentreturn/',["order_id" => $order->getIncrementId(), "payment_id" => $payment->getId()]));
         $paymentRequest->setWebhookUrl($this->_url->getUrl('ccvonlinepayments/checkout/webhook/',["order_id" => $order->getIncrementId(), "payment_id" => $payment->getId()]));
-        $paymentRequest->setMethod(str_replace("ccvonlinepayments_","",$payment->getMethod()));
+        $paymentRequest->setMethod($methodId);
         $paymentRequest->setMerchantOrderReference($order->getId());
 
         $language = "eng";
@@ -114,6 +124,9 @@ class Redirect extends Action {
         $paymentRequest->setScaReady(false);
 
         $billingCountryCode = $this->countryInformation->getCountryInfo($order->getBillingAddress()->getCountryId())->getTwoLetterAbbreviation();
+        $paymentRequest->setBillingEmail($order->getBillingAddress()->getEmail());
+        $paymentRequest->setBillingFirstName($order->getBillingAddress()->getFirstName());
+        $paymentRequest->setBillingLastName($order->getBillingAddress()->getLastName());
         $paymentRequest->setBillingAddress($order->getBillingAddress()->getStreetLine(1));
         $paymentRequest->setBillingCity($order->getBillingAddress()->getCity());
         $paymentRequest->setBillingPostalCode($order->getBillingAddress()->getPostcode());
@@ -122,6 +135,9 @@ class Redirect extends Action {
         $paymentRequest->setBillingPhoneNumber($order->getBillingAddress()->getTelephone());
 
         $shippingCountryCode = $this->countryInformation->getCountryInfo($order->getShippingAddress()->getCountryId())->getTwoLetterAbbreviation();
+        $paymentRequest->setShippingEmail($order->getShippingAddress()->getEmail());
+        $paymentRequest->setShippingFirstName($order->getShippingAddress()->getFirstName());
+        $paymentRequest->setShippingLastName($order->getShippingAddress()->getLastName());
         $paymentRequest->setShippingAddress($order->getShippingAddress()->getStreetLine(1));
         $paymentRequest->setShippingCity($order->getShippingAddress()->getCity());
         $paymentRequest->setShippingPostalCode($order->getShippingAddress()->getPostcode());
@@ -136,9 +152,13 @@ class Redirect extends Action {
         }
 
         $paymentRequest->setBrowserFromServer();
-        $objctManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $remote = $objctManager->get('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress');
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $remote = $objectManager->get('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress');
         $paymentRequest->setBrowserIpAddress($remote->getRemoteAddress());
+
+        if($method->isOrderLinesRequired()) {
+            $paymentRequest->setOrderLines($this->getOrderlinesByOrder($order));
+        }
 
         try {
             $paymentResponse = $ccvOnlinePaymentsApi->createPayment($paymentRequest);
@@ -154,5 +174,38 @@ class Redirect extends Action {
         $this->orderRepository->save($order);
 
         $this->_redirect($paymentResponse->getPayUrl());
+    }
+
+    private function getOrderlinesByOrder(Order $order) {
+        $orderLines = [];
+
+        /** @var OrderItemInterface $visibleItem */
+        foreach($order->getAllVisibleItems() as $visibleItem) {
+            $orderLine = new OrderLine();
+            $orderLine->setType(OrderLine::TYPE_PHYSICAL);
+            $orderLine->setName($visibleItem->getName());
+            $orderLine->setQuantity(round($visibleItem->getQtyOrdered()));
+            $orderLine->setTotalPrice($visibleItem->getRowTotal() - $visibleItem->getDiscountAmount() + $visibleItem->getTaxAmount() + $visibleItem->getDiscountTaxCompensationAmount());
+            $orderLine->setUnit("pcs");
+            $orderLine->setUnitPrice($orderLine->getTotalPrice()/$orderLine->getQuantity());
+            $orderLine->setVatRate($visibleItem->getTaxPercent());
+            $orderLine->setVat($visibleItem->getTaxAmount());
+            $orderLines[] = $orderLine;
+        }
+
+        $totalShippingAmount = $order->getShippingAmount() + $order->getShippingTaxAmount() + $order->getShippingDiscountTaxCompensationAmount();
+        if($totalShippingAmount > 0) {
+            $orderLine = new \CCVOnlinePayments\Lib\OrderLine();
+            $orderLine->setType(\CCVOnlinePayments\Lib\OrderLine::TYPE_SHIPPING_FEE);
+            $orderLine->setName("Shipping");
+            $orderLine->setQuantity(1);
+            $orderLine->setTotalPrice($totalShippingAmount);
+            $orderLine->setVat($order->getShippingTaxAmount());
+            $orderLine->setVatRate(($order->getShippingTaxAmount() / $order->getShippingAmount()) * 100);
+            $orderLine->setUnitPrice($totalShippingAmount);
+            $orderLines[] = $orderLine;
+        }
+
+        return $orderLines;
     }
 }
