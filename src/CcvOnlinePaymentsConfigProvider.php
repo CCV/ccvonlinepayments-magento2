@@ -20,30 +20,28 @@ class CcvOnlinePaymentsConfigProvider implements ConfigProviderInterface
 
    public function getConfig() {
         $config = [
-            "issuers"    => [],
-            "issuerKeys" => [],
-            "icons"      => [],
+            "payment" => []
         ];
 
-        $ccvOnlinePaymentsApi = $this->ccvOnlinePaymentsService->getApi();
-        foreach($ccvOnlinePaymentsApi->getMethods() as $method) {
-            $methodId = "ccvonlinepayments_".$method->getId();
+       $ccvOnlinePaymentsApi = $this->ccvOnlinePaymentsService->getApi();
+       foreach($ccvOnlinePaymentsApi->getMethods() as $method) {
+           $methodId = "ccvonlinepayments_".$method->getId();
 
-            if($method->getIssuers() !== null) {
-                $config['issuerKeys'][$methodId] = $method->getIssuerKey();
-                $config['issuers'][$methodId] = [];
-                foreach ($method->getIssuers() as $issuer) {
-                    $config['issuers'][$methodId][] = [
-                        "id" => $issuer->getId(),
-                        "description" => $issuer->getDescription(),
-                    ];
-                }
-            }
+           if(file_exists(__DIR__."/../view/base/web/images/methods/".$method->getId().".png")) {
+               $config['payment'][$methodId]['icon'] = $this->assetRepository->getUrl('CCVOnlinePayments_Magento::images/methods/'.$method->getId().".png");
+           }
 
-            if(file_exists(__DIR__."/../view/base/web/images/methods/".$method->getId().".png")) {
-                $config['icons'][$methodId] = $this->assetRepository->getUrl('CCVOnlinePayments_Magento::images/methods/'.$method->getId().".png");
-            }
-        }
+           if($method->getIssuers() !== null) {
+               $config['payment'][$methodId]['issuerKey'] = $method->getIssuerKey();
+               $config['payment'][$methodId]['issuers'] = [];
+               foreach ($method->getIssuers() as $issuer) {
+                   $config['payment'][$methodId]['issuers'][] = [
+                       "id" => $issuer->getId(),
+                       "description" => $issuer->getDescription(),
+                   ];
+               }
+           }
+       }
 
         return $config;
    }

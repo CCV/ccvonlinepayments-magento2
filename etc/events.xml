@@ -2,4 +2,7 @@
     <event name="sales_order_payment_capture">
         <observer name="ccvonlinepayments_payment_capture" instance="CCVOnlinePayments\Magento\Observer\PaymentCapture"/>
     </event>
+    <event name="sales_quote_payment_import_data_before">
+        <observer name="ccvonlinepayments_clear_additional_data_on_method_change" instance="CCVOnlinePayments\Magento\Observer\ClearAdditionalDataOnMethodChange"/>
+    </event>
 </config>
