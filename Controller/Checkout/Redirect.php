@@ -27,6 +27,7 @@ class Redirect extends Action {
     private $orderPaymentRepository;
     private $orderRepository;
     private $countryInformation;
+    private $request;
     private $ccvOnlinePaymentsService;
 
     public function __construct(
@@ -39,6 +40,7 @@ class Redirect extends Action {
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         OrderRepositoryInterface $orderRepostiory,
         CountryInformationAcquirerInterface $countryInformation,
+        \Magento\Framework\App\Request\Http $request,
         CcvOnlinePaymentsService $ccvOnlinePaymentsService
     )
     {
@@ -51,6 +53,7 @@ class Redirect extends Action {
         $this->orderPaymentRepository   = $orderPaymentRepository;
         $this->orderRepository          = $orderRepostiory;
         $this->countryInformation       = $countryInformation;
+        $this->request                  = $request;
         $this->ccvOnlinePaymentsService = $ccvOnlinePaymentsService;
     }
 
@@ -85,6 +88,13 @@ class Redirect extends Action {
 
     private function doPayment(Order $order) {
         $ccvOnlinePaymentsApi = $this->ccvOnlinePaymentsService->getApi();
+
+        $checkout =  $this->request->getParam('checkout', null);
+        if($checkout !== null) {
+            $ccvOnlinePaymentsApi->addMetadata([
+                "Checkout" => $checkout
+            ]);
+        }
 
         $payment = $order->getPayment();
         $methodId = str_replace("ccvonlinepayments_","",$payment->getMethod());
