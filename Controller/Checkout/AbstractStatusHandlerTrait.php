@@ -14,12 +14,14 @@ use Magento\Checkout\Model\Session;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 trait AbstractStatusHandlerTrait {
 
     protected $session;
     protected $orderFactory;
     protected $orderRepository;
+    protected $orderSender;
     protected $config;
     protected $store;
     protected $localeResolver;
@@ -34,6 +36,7 @@ trait AbstractStatusHandlerTrait {
         Session $checkoutSession,
         OrderFactory $orderFactory,
         OrderRepository $orderRepository,
+        OrderSender $orderSender,
         ScopeConfigInterface $config,
         StoreInterface $store,
         ResolverInterface $localeResolver,
@@ -48,6 +51,7 @@ trait AbstractStatusHandlerTrait {
         $this->session                  = $checkoutSession;
         $this->orderFactory             = $orderFactory;
         $this->orderRepository          = $orderRepository;
+        $this->orderSender              = $orderSender;
         $this->config                   = $config;
         $this->store                    = $store;
         $this->localeResolver           = $localeResolver;
@@ -92,10 +96,18 @@ trait AbstractStatusHandlerTrait {
 
                     $order->setState(Order::STATE_PROCESSING);
                     $this->orderRepository->save($order);
+
+                    if(!$order->getEmailSent()) {
+                        $this->orderSender->send($order);
+                        $order  ->addStatusHistoryComment(__("New order email sent"))
+                                ->setIsCustomerNotified(true)
+                                ->save();
+                    }
                 }
             }
         }
 
         return $paymentStatus;
     }
+
 }

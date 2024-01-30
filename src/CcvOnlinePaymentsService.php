@@ -10,7 +10,7 @@ use Magento\Framework\Module\ModuleListInterface;
 class CcvOnlinePaymentsService
 {
 
-    private const VERSION = "1.3.7";
+    private const VERSION = "1.3.8";
 
     private $config;
     private $cache;
