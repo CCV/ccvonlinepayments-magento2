@@ -17,20 +17,20 @@ define(
                 window.location.replace(url.build('ccvonlinepayments/checkout/redirect'));
             },
             getIssuers: function() {
-                return window.checkoutConfig.issuers[this.item.method];
+                return window.checkoutConfig.payment[this.item.method]?.issuers;
             },
             getSelectedIssuer: function() {
                 return this.selectedIssuer;
             },
             getIcon: function() {
-                return window.checkoutConfig.icons[this.item.method];
+                return window.checkoutConfig.payment[this.item.method]?.icon;
             },
             getData: function () {
                 return {
                     'method': this.item.method,
                     'additional_data': {
                         "selectedIssuer":   this.selectedIssuer,
-                        "issuerKey":        window.checkoutConfig.issuerKeys[this.item.method]
+                        "issuerKey":        window.checkoutConfig.payment[this.item.method]?.issuerKey
                     }
                 };
             },
