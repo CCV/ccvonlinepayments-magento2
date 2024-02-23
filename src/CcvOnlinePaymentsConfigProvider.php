@@ -31,7 +31,7 @@ class CcvOnlinePaymentsConfigProvider implements ConfigProviderInterface
                $config['payment'][$methodId]['icon'] = $this->assetRepository->getUrl('CCVOnlinePayments_Magento::images/methods/'.$method->getId().".png");
            }
 
-           if($method->getIssuers() !== null) {
+           if($method->getId() !== "ideal" && $method->getIssuers() !== null) {
                $config['payment'][$methodId]['issuerKey'] = $method->getIssuerKey();
                $config['payment'][$methodId]['issuers'] = [];
                foreach ($method->getIssuers() as $issuer) {
