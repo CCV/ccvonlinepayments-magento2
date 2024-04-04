@@ -1,6 +1,6 @@
 # 1. About this plugin
 
-Official CCV Payment Services plugin for Magento 2.
+Official CCV Online Payments plugin for Magento 2.
 
 # 2. Technical information
 
@@ -38,7 +38,7 @@ Manuals are available on the [CCV web site](https://www.ccv.eu/nl/service/suppor
 
 # 4. Support
 
-Please create a GitHub issue for feature requests or bug reports. If you have a general question or installation difficulties, you can contact us directly through [this form](https://www.ccv.eu/nl/betaaloplossingen/betaaloplossingen-online/online-payments-voor-developers). 
+Please create a GitHub issue for feature requests or bug reports. If you have a general question or installation difficulties, you can contact us directly ecommerce@ccv.eu
 
 # 5. License
 
