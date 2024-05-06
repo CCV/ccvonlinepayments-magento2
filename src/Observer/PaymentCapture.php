@@ -4,9 +4,6 @@ namespace CCVOnlinePayments\Magento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Generate item list for payment capture
- */
 class PaymentCapture implements ObserverInterface
 {
 

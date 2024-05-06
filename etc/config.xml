@@ -145,6 +145,19 @@
                 <is_offline>0</is_offline>
                 <sort_order>10</sort_order>
             </ccvonlinepayments_banktransfer>
+            <ccvonlinepayments_paybylink>
+                <model>CcvOnlinePaymentsMagentoMethodPayByLink</model>
+                <title>Pay by Link</title>
+                <payment_action>authorize_capture</payment_action>
+                <is_gateway>0</is_gateway>
+                <can_order>1</can_order>
+                <can_capture>1</can_capture>
+                <can_authorize>0</can_authorize>
+                <can_use_checkout>1</can_use_checkout>
+                <can_use_internal>1</can_use_internal>
+                <is_offline>0</is_offline>
+                <sort_order>11</sort_order>
+            </ccvonlinepayments_paybylink>
         </payment>
     </default>
 </config>

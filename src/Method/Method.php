@@ -24,6 +24,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use \Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund;
 use Psr\Log\LoggerInterface;
+use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Method extends \Magento\Payment\Model\Method\Adapter {
 
@@ -40,6 +41,9 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
     private $orderPaymentRepository;
     private $invoiceRepository;
 
+    protected $state;
+    protected $config;
+
     public function __construct(
         ManagerInterface $eventManager,
         ValueHandlerPoolInterface $valueHandlerPool,
@@ -54,6 +58,8 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         CommandManagerInterface $commandExecutor = null,
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         InvoiceRepositoryInterface $invoiceRepository,
+        \Magento\Framework\App\State $state,
+        ScopeConfigInterface $config,
         LoggerInterface $logger = null)
     {
         parent::__construct($eventManager, $valueHandlerPool, $paymentDataObjectFactory, $code, $formBlockType, $infoBlockType, $commandPool, $validatorPool, $commandExecutor, $logger);
@@ -61,6 +67,8 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         $this->ccvOnlinePaymentsService = $ccvOnlinePaymentsService;
         $this->orderPaymentRepository   = $orderPaymentRepository;
         $this->invoiceRepository        = $invoiceRepository;
+        $this->config                   = $config;
+        $this->state                    = $state;
     }
 
     public function isAvailable(CartInterface $quote = null)
@@ -68,7 +76,7 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         if(parent::isAvailable($quote)) {
             $method = $this->ccvOnlinePaymentsService->getMethodById($this->getCode());
             if($method !== null) {
-                return $method->isCurrencySupported($this->checkoutSession->getQuote()->getCurrency()->getQuoteCurrencyCode());
+                return $method->isCurrencySupported($quote->getCurrency()->getQuoteCurrencyCode());
             }
         }
 

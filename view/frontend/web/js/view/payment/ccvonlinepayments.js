@@ -48,6 +48,9 @@ define(
             },{
                 type: 'ccvonlinepayments_sofort',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
+            },{
+                type: 'ccvonlinepayments_paybylink',
+                component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             }
         );
         /** Add view logic here if needed */

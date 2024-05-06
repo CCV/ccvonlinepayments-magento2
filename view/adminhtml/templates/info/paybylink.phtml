@@ -1,0 +1,10 @@
+<dl class="payment-method ccvonlinepayments-pay-by-link">
+    <dt class="title"><?=$block->escapeHtml($block->getMethod()->getTitle())?></dt>
+    <dd class="content">
+        <span class="url">
+            <a href="<?=$block->escapeHtml($block->getPaymentLink())?>">
+                <?=$block->escapeHtml(__('Click here to pay'))?>
+            </a>
+        </span>
+    </dd>
+</dl>

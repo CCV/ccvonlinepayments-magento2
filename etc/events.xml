@@ -5,4 +5,7 @@
     <event name="sales_quote_payment_import_data_before">
         <observer name="ccvonlinepayments_clear_additional_data_on_method_change" instance="CCVOnlinePayments\Magento\Observer\ClearAdditionalDataOnMethodChange"/>
     </event>
+    <event name="sales_model_service_quote_submit_success">
+        <observer name="ccvonlinepayments_start_paybylink_transaction" instance="CCVOnlinePayments\Magento\Observer\StartPayByLinkTransaction" />
+    </event>
 </config>

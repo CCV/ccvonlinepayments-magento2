@@ -17,6 +17,7 @@ class PaymentReturn extends Action {
             $this->_redirect('checkout/cart');
         }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_SUCCESS) {
             $this->session->start();
+            $this->messageManager->addSuccessMessage(__('Your payment was successful.'));
             $this->_redirect('checkout/onepage/success');
         }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_PENDING) {
             $this->session->start();

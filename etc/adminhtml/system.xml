@@ -106,6 +106,24 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
+                <group id="ccvonlinepayments_paybylink" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pay by Link</label>
+                    <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="expiration" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Expiration</label>
+                        <comment>The amount of days the payment will be valid (max 60)</comment>
+                        <validate>validate-number validate-number-range number-range-1-60</validate>
+                    </field>
+                    <field id="customerGroupList" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Allow payment method in webshop</label>
+                        <comment>By default this payment method is not available in the webshop, but only in the admin. By selecting a customer group here, the payment method will be available for these customers.</comment>
+                        <source_model>Magento\Customer\Model\Customer\Source\GroupSourceInterface</source_model>
+                        <can_be_empty>1</can_be_empty>
+                    </field>
+                </group>
             </group>
         </section>
     </system>

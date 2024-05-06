@@ -34,5 +34,8 @@
         <method name="ccvonlinepayments_banktransfer">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="ccvonlinepayments_paybylink">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
     </methods>
 </payment>

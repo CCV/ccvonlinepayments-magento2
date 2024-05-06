@@ -287,6 +287,17 @@
     </virtualType>
 
 
+    <virtualType name="CcvOnlinePaymentsMagentoMethodPayByLink" type="CCVOnlinePayments\Magento\Method\PayByLink">
+        <arguments>
+            <argument name="code" xsi:type="string">ccvonlinepayments_paybylink</argument>
+            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">CCVOnlinePayments\Magento\Block\Info\PayByLink</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolPayByLink</argument>
+            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
+        </arguments>
+    </virtualType>
 
 
     <virtualType name="CcvOnlinePaymentsMagentoMethodBanktransfer" type="CCVOnlinePayments\Magento\Method\Banktransfer">
@@ -425,23 +436,23 @@
     </virtualType>
 
 
-    <virtualType name="CCVOnlinePaymentsValueHandlerPoolXXXX" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+    <virtualType name="CCVOnlinePaymentsValueHandlerPoolPayByLink" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerXXXX</item>
+                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerPayByLink</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="CCVOnlinePaymentsValueHandlerXXXX" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
+    <virtualType name="CCVOnlinePaymentsValueHandlerPayByLink" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigXXXX</argument>
+            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigPayByLink</argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="CCVOnlinePaymentsConfigXXXX" type="CCVOnlinePayments\Magento\Config">
+    <virtualType name="CCVOnlinePaymentsConfigPayByLink" type="CCVOnlinePayments\Magento\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="string">ccvonlinepayments_ideal</argument>
+            <argument name="methodCode" xsi:type="string">ccvonlinepayments_paybylink</argument>
             <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
         </arguments>
     </virtualType>
