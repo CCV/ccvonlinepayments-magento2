@@ -1,45 +1,81 @@
-# 1. About this plugin
+# About this plugin
 
-Official CCV Online Payments plugin for Magento 2.
+Magento 2 is a powerful, open-source e-commerce platform designed for businesses of all sizes. Known for its flexibility, scalability, and robust feature set, Magento 2 offers extensive customization options and a wide range of third-party extensions. It's ideal for businesses with complex product catalogs and high transaction volumes, and it requires technical expertise for setup and maintenance.
 
-# 2. Technical information
+CCV has developed a dedicated plugin that seamlessly integrates Magento 2 with CCV's Online Payments solution.  This plugin connects your Magento 2 store to CCV's payment gateway.
 
-## 2.1. Plugin dependencies
+# Payment methods
+CCV makes the following payment methods available in this plugin: 
+- iDeal
+- Bancontact
+- Apple Pay
+- Google Pay
+- Maestro
+- Mastercard
+- Visa
+- Amex
+- PayPal
+- Klarna
+- Bank Transfer	
 
-- Magento 2.3.5-p2 or higher
-- PHP 7.2 or higher
+# Requirements
+To support this plugin, the following requirements must be met:
+-	Magento 2.3.5-p2 or higher
+-	PHP 7.2 or higher
+-	MyCCV account & API key*
+-	Composer**
 
-# 3. Installing the plugin into your web shop
+*The live API key is released after successful boarding by CCV Online Payments. To register, contact us at https://www.ccv.eu/en/solutions/payment-services/ccv-online-payments/partners/online-payments-form/.
 
-from CMD line:
-1. composer require ccv/magento2
-2. php bin/magento module:enable --clear-static-content CCVOnlinePayments_Magento
-3. php bin/magento setup:upgrade
-4. php bin/magento cache:clean
-5. php bin/magento indexer:reindex
+**Composer is a PHP dependency manager. 
+1.	Check if Composer is already installed: Some hosting providers may already have Composer installed, especially if they offer Magento-optimized hosting. You can check by running “composer --version” in your command line.
+2.	Install Composer: If Composer is not installed, you need to follow Composer’s installation guide, which is typically done via the command line. The official installation instructions are available on Composer's website, and they vary depending on the server’s operating system (Linux, Windows, macOS).
 
-in Magento Admin:
+# Download
+from CMD line in the Magento 2 root folder:
+```
+composer require ccv/magento2
+```
 
-1. Click on Stores
-2. Click on Configuration
-3. Click on Sales
-4. Click on Payment Methodes
-5. Open Other Payment methods
-6. Open  CCV Online Payments
-7. Open General
-8. Get your LIVE API key from your MyCCV account*
-9. Enter the API key
-10. Open and activate the desired payment methods
-11. Click on Save Config
+# Install
+from CMD line in the Magento 2 root folder:
+```
+php bin/magento module:enable --clear-static-content CCVOnlinePayments_Magento
+php bin/magento setup:upgrade
+php bin/magento cache:clean
+php bin/magento indexer:reindex
+```
 
-*The live API key is released after successful boarding by CCV Online Payments.
+# Upgrade
+from CMD line in the Magento 2 root folder:
+```
+composer update ccv/magento2
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+php bin/magento setup:di:compile
+```
 
-Manuals are available on the [CCV web site](https://www.ccv.eu/nl/service/support/handleidingen).
+# Configure
+In Magento Admin:
+1.	Click on Stores
+2.	Click on Configuration
+3.	Click on Sales
+4.	Click on Payment Methodes
+5.	Open Other Payment methods
+6.	Open CCV Online Payments
+7.	Open General
+8.	Get your LIVE API key from your MyCCV account
+9.	Enter the API key
+10.	Open and activate the desired payment methods
+11.	Click on Save Config
 
-# 4. Support
+# Release notes
+At CCV, we are committed to transparency and keeping our users informed about the continuous improvements to our Online Payments solution. To ensure easy access to the latest updates, we maintain a dedicated release notes website. This resource provides detailed information about each new version, including feature additions, enhancements, and fixes. By visiting the website, you can stay up to date with the latest developments and make the most of the new tools and capabilities we introduce.
 
-Please create a GitHub issue for feature requests or bug reports. If you have a general question or installation difficulties, you can contact us directly ecommerce@ccv.eu
+# Contact Us
 
-# 5. License
+Please create a GitHub issue for feature requests or bug reports. If you have a general question or installation difficulties, you can contact us directly ecommerce@ccv.eu.
+
+# License
 
 [![MIT license](https://img.shields.io/github/license/CCV/ccvonlinepayments-magento2)](https://github.com/CCV/ccvonlinepayments-magento2/blob/master/LICENSE.txt)
