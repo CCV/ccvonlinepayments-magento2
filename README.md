@@ -1,3 +1,5 @@
+<img src="https://github.com/user-attachments/assets/060de999-2f1f-491f-94d8-dd22121526d8" alt="Magento" width="200"/>
+
 # About this plugin
 Magento 2 is a powerful, open-source e-commerce platform designed for businesses of all sizes. Known for its flexibility, scalability, and robust feature set, Magento 2 offers extensive customization options and a wide range of third-party extensions. It's ideal for businesses with complex product catalogs and high transaction volumes, and it requires technical expertise for setup and maintenance.
 
