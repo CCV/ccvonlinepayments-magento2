@@ -1,5 +1,4 @@
 # About this plugin
-
 Magento 2 is a powerful, open-source e-commerce platform designed for businesses of all sizes. Known for its flexibility, scalability, and robust feature set, Magento 2 offers extensive customization options and a wide range of third-party extensions. It's ideal for businesses with complex product catalogs and high transaction volumes, and it requires technical expertise for setup and maintenance.
 
 CCV has developed a dedicated plugin that seamlessly integrates Magento 2 with CCV's Online Payments solution.  This plugin connects your Magento 2 store to CCV's payment gateway.
@@ -73,7 +72,6 @@ In Magento Admin:
 At CCV, we are committed to transparency and keeping our users informed about the continuous improvements to our Online Payments solution. To ensure easy access to the latest updates, we maintain a dedicated release notes website. This resource provides detailed information about each new version, including feature additions, enhancements, and fixes. By visiting the website, you can stay up to date with the latest developments and make the most of the new tools and capabilities we introduce.
 
 # Contact Us
-
 Please create a GitHub issue for feature requests or bug reports. If you have a general question or installation difficulties, you can contact us directly ecommerce@ccv.eu.
 
 # License
