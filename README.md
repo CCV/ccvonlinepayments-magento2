@@ -26,7 +26,7 @@ To support this plugin, the following requirements must be met:
 -	MyCCV account & API key*
 -	Composer**
 
-*The live API key is released after successful boarding by CCV Online Payments. To register, contact us at https://www.ccv.eu/en/solutions/payment-services/ccv-online-payments/partners/online-payments-form/.
+*The live API key is released after successful boarding by CCV Online Payments. To register, contact us [here](https://www.ccv.eu/en/solutions/payment-services/ccv-online-payments/partners/online-payments-form/).
 
 **Composer is a PHP dependency manager. 
 1.	Check if Composer is already installed: Some hosting providers may already have Composer installed, especially if they offer Magento-optimized hosting. You can check by running “composer --version” in your command line.
@@ -71,7 +71,7 @@ In Magento Admin:
 11.	Click on Save Config
 
 # Release notes
-At CCV, we are committed to transparency and keeping our users informed about the continuous improvements to our Online Payments solution. To ensure easy access to the latest updates, we maintain a dedicated release notes website. This resource provides detailed information about each new version, including feature additions, enhancements, and fixes. By visiting the website, you can stay up to date with the latest developments and make the most of the new tools and capabilities we introduce.
+At CCV, we are committed to transparency and keeping our users informed about the continuous improvements to our Online Payments solution. To ensure easy access to the latest updates, we maintain a dedicated [release notes website](https://onlinepayments.ccvlab.eu/). This resource provides detailed information about each new version, including feature additions, enhancements, and fixes. By visiting the website, you can stay up to date with the latest developments and make the most of the new tools and capabilities we introduce.
 
 # Contact Us
 Please create a GitHub issue for feature requests or bug reports. If you have a general question or installation difficulties, you can contact us directly ecommerce@ccv.eu.
