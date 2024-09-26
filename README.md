@@ -74,7 +74,8 @@ In Magento Admin:
 At CCV, we are committed to transparency and keeping our users informed about the continuous improvements to our Online Payments solution. To ensure easy access to the latest updates, we maintain a dedicated [release notes website](https://onlinepayments.ccvlab.eu/). This resource provides detailed information about each new version, including feature additions, enhancements, and fixes. By visiting the website, you can stay up to date with the latest developments and make the most of the new tools and capabilities we introduce.
 
 # Contact Us
-Please create a GitHub issue for feature requests or bug reports. 
+Please create a GitHub issue for feature requests or bug reports.
+
 If you have a general question or installation difficulties, you can contact us directly ecommerce@ccv.eu, or call us at +882289999.
 
 # License
