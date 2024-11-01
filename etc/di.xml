@@ -82,7 +82,38 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="CcvOnlinePaymentsMagentoMethodGooglePay" type="CCVOnlinePayments\Magento\Method\GooglePay">
+        <arguments>
+            <argument name="code" xsi:type="string">ccvonlinepayments_googlepay</argument>
+            <argument name="formBlockType" xsi:type="string">\Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CCVOnlinePaymentsValueHandlerPoolGooglePay</argument>
+            <argument name="validatorPool" xsi:type="object">CCVOnlinePaymentsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">CcvOnlinePaymentsMagentoCommandPool</argument>
+            <argument name="commandExecutor" xsi:type="object">CcvOnlinePaymentsMagentoCommandManager</argument>
+        </arguments>
+    </virtualType>
 
+    <virtualType name="CCVOnlinePaymentsValueHandlerPoolGooglePay" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CCVOnlinePaymentsValueHandlerGooglePay</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsValueHandlerGooglePay" type="\Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CCVOnlinePaymentsConfigGooglePay</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CCVOnlinePaymentsConfigGooglePay" type="CCVOnlinePayments\Magento\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">ccvonlinepayments_googlepay</argument>
+            <argument name="pathPattern" xsi:type="string">payment/ccvonlinepayments/%s/%s</argument>
+        </arguments>
+    </virtualType>
 
 
     <virtualType name="CcvOnlinePaymentsMagentoMethodCardBcmc" type="CCVOnlinePayments\Magento\Method\CardBcmc">

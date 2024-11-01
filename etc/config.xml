@@ -25,6 +25,18 @@
                 <is_offline>0</is_offline>
                 <sort_order>0</sort_order>
             </ccvonlinepayments_applepay>
+            <ccvonlinepayments_googlepay>
+                <model>CcvOnlinePaymentsMagentoMethodGooglePay</model>
+                <title>Google Pay</title>
+                <payment_action>authorize_capture</payment_action>
+                <is_gateway>0</is_gateway>
+                <can_order>1</can_order>
+                <can_capture>1</can_capture>
+                <can_authorize>0</can_authorize>
+                <can_use_checkout>1</can_use_checkout>
+                <is_offline>0</is_offline>
+                <sort_order>0</sort_order>
+            </ccvonlinepayments_googlepay>
             <ccvonlinepayments_card_bcmc>
                 <model>CcvOnlinePaymentsMagentoMethodCardBcmc</model>
                 <title>Bancontact</title>

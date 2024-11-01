@@ -18,7 +18,7 @@ use Magento\Directory\Api\CountryInformationAcquirerInterface;
 class CcvOnlinePaymentsService
 {
 
-    private const VERSION = "1.6.1";
+    private const VERSION = "1.6.2";
 
     private $config;
     private $cache;

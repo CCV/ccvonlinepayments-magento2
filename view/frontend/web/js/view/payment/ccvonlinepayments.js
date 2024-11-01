@@ -40,6 +40,9 @@ define(
                 type: 'ccvonlinepayments_applepay',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{
+                type: 'ccvonlinepayments_googlepay',
+                component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
+            },{
                 type: 'ccvonlinepayments_klarna',
                 component: 'CCVOnlinePayments_Magento/js/view/payment/method/default'
             },{

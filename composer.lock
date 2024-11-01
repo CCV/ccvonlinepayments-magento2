@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a42199b260b1390a9c8437283518ee8b",
+    "content-hash": "75c8c396f48002a57220472d6a644a0c",
     "packages": [
         {
             "name": "brick/math",
@@ -157,18 +157,24 @@
         },
         {
             "name": "ccv/php-lib",
-            "version": "1.3.0",
+            "version": "1.3.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CCV/ccvonlinepayments-php-lib.git",
+                "reference": "2378ffb1f4874bd4ae5759fafb53f4346ea5635d"
+            },
             "dist": {
-                "type": "path",
-                "url": "../lib",
-                "reference": "0f7074823bf0f5a4120117b2c9356e253f78069e"
+                "type": "zip",
+                "url": "https://api.github.com/repos/CCV/ccvonlinepayments-php-lib/zipball/2378ffb1f4874bd4ae5759fafb53f4346ea5635d",
+                "reference": "2378ffb1f4874bd4ae5759fafb53f4346ea5635d",
+                "shasum": ""
             },
             "require": {
                 "brick/phonenumber": "0.1.*",
                 "ext-curl": "*",
                 "ext-json": "*",
                 "php": ">=7.2.0",
-                "php-curl-class/php-curl-class": "^8.8",
+                "php-curl-class/php-curl-class": "^8.8|^9.0",
                 "psr/log": "^1.1"
             },
             "type": "library",
@@ -177,6 +183,7 @@
                     "CCVOnlinePayments\\Lib\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -188,9 +195,11 @@
                 "payments",
                 "php"
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/CCV/ccvonlinepayments-php-lib/issues",
+                "source": "https://github.com/CCV/ccvonlinepayments-php-lib/tree/v1.3.9"
+            },
+            "time": "2024-07-29T08:31:10+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -8632,13 +8641,20 @@
     "packages-dev": [
         {
             "name": "ccv/images",
-            "version": "1.1.2",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CCV/ccvonlinepayments-images.git",
+                "reference": "467be685b9c71c96cfe7ec654cec49e8b0ea81e0"
+            },
             "dist": {
-                "type": "path",
-                "url": "../images",
-                "reference": "5e8a8193abc804f7ae6e0a972f811f2f5ba378bf"
+                "type": "zip",
+                "url": "https://api.github.com/repos/CCV/ccvonlinepayments-images/zipball/467be685b9c71c96cfe7ec654cec49e8b0ea81e0",
+                "reference": "467be685b9c71c96cfe7ec654cec49e8b0ea81e0",
+                "shasum": ""
             },
             "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -8650,9 +8666,11 @@
                 "payments",
                 "resources"
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/CCV/ccvonlinepayments-images/issues",
+                "source": "https://github.com/CCV/ccvonlinepayments-images/tree/v1.1.4"
+            },
+            "time": "2024-07-29T08:31:33+00:00"
         }
     ],
     "aliases": [],
@@ -8661,8 +8679,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2"
+        "php": ">7.2,<8.2.999"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.6.0"
 }
