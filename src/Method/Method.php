@@ -1,11 +1,13 @@
 <?php namespace CCVOnlinePayments\Magento\Method;
 
 use CCVOnlinePayments\Lib\CaptureRequest;
+use CCVOnlinePayments\Lib\Enum\OrderLineType;
 use CCVOnlinePayments\Lib\Exception\ApiException;
 use CCVOnlinePayments\Lib\OrderLine;
 use CCVOnlinePayments\Lib\RefundRequest;
 use CCVOnlinePayments\Lib\ReversalRequest;
 use CCVOnlinePayments\Magento\CcvOnlinePaymentsService;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -16,33 +18,20 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use \Magento\Sales\Model\Order;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund;
 use Psr\Log\LoggerInterface;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Method extends \Magento\Payment\Model\Method\Adapter {
 
-    public $_canCapture = true;
-    public $_canAuthorize = true;
-    public $_canRefund = true;
-    public $_canRefundInvoicePartial = true;
+    public bool $_canCapture = true;
+    public bool $_canAuthorize = true;
+    public bool $_canRefund = true;
+    public bool $_canRefundInvoicePartial = true;
 
-    public $_isInitializeNeeded = true;
-
-    private $checkoutSession;
-    private $ccvOnlinePaymentsService;
-
-    private $orderPaymentRepository;
-    private $invoiceRepository;
-
-    protected $state;
-    protected $config;
+    public bool $_isInitializeNeeded = true;
 
     public function __construct(
         ManagerInterface $eventManager,
@@ -51,67 +40,76 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         $code,
         $formBlockType,
         $infoBlockType,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        CcvOnlinePaymentsService $ccvOnlinePaymentsService,
-        CommandPoolInterface $commandPool = null,
-        ValidatorPoolInterface $validatorPool = null,
-        CommandManagerInterface $commandExecutor = null,
-        OrderPaymentRepositoryInterface $orderPaymentRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
-        \Magento\Framework\App\State $state,
-        ScopeConfigInterface $config,
-        LoggerInterface $logger = null)
+        private readonly CcvOnlinePaymentsService $ccvOnlinePaymentsService,
+        private readonly OrderPaymentRepositoryInterface $orderPaymentRepository,
+        private readonly InvoiceRepositoryInterface $invoiceRepository,
+        protected readonly \Magento\Framework\App\State $state,
+        protected readonly ScopeConfigInterface $config,
+        ?CommandPoolInterface $commandPool = null,
+        ?ValidatorPoolInterface $validatorPool = null,
+        ?CommandManagerInterface $commandExecutor = null,
+        ?LoggerInterface $logger = null)
     {
         parent::__construct($eventManager, $valueHandlerPool, $paymentDataObjectFactory, $code, $formBlockType, $infoBlockType, $commandPool, $validatorPool, $commandExecutor, $logger);
-        $this->checkoutSession          = $checkoutSession;
-        $this->ccvOnlinePaymentsService = $ccvOnlinePaymentsService;
-        $this->orderPaymentRepository   = $orderPaymentRepository;
-        $this->invoiceRepository        = $invoiceRepository;
-        $this->config                   = $config;
-        $this->state                    = $state;
+
     }
 
-    public function isAvailable(CartInterface $quote = null)
+    public function isAvailable(?CartInterface $quote = null) : bool
     {
-        if(parent::isAvailable($quote)) {
+        if($quote !== null && parent::isAvailable($quote)) {
             $method = $this->ccvOnlinePaymentsService->getMethodById($this->getCode());
             if($method !== null) {
-                return $method->isCurrencySupported($quote->getCurrency()->getQuoteCurrencyCode());
+                $currencyCode = $quote->getCurrency()?->getQuoteCurrencyCode();
+                if($currencyCode !== null) {
+                    return $method->isCurrencySupported($currencyCode);
+                }else{
+                    return false;
+                }
             }
         }
 
         return false;
     }
 
-    public function canCapture()
+    public function canCapture() : bool
     {
         return true;
     }
 
-    public function canCapturePartial()
+    public function canCapturePartial() : bool
     {
         return true;
     }
 
-    public function capture(InfoInterface $payment, $amount)
+    /**
+     * @param Order\Payment $payment
+     * @param float $amount
+     */
+    public function capture(InfoInterface $payment, $amount) : self
     {
         $captureRequest = new CaptureRequest();
         $captureRequest->setReference($payment->getCcvonlinepaymentsReference());
         $captureRequest->setAmount($amount);
 
-        /** @var InvoiceInterface $invoice */
+        /** @var Order\Invoice $invoice */
         $invoice = $payment->getInvoice();
         $captureRequest->setOrderLines($this->getOrderlinesByInvoice($invoice));
 
         $captureResponse = $this->ccvOnlinePaymentsService->getApi()->createCapture($captureRequest);
+        if($captureResponse->getReference() === null) {
+            throw new \Exception("Reference not found");
+        }
+
         $payment->setTransactionId($captureResponse->getReference());
         $this->orderPaymentRepository->save($payment);
 
         $invoice->setTransactionId($captureResponse->getReference());
         $this->invoiceRepository->save($invoice);
+
+        return $this;
     }
 
-    public function assignData(\Magento\Framework\DataObject $data)
+    public function assignData(\Magento\Framework\DataObject $data) : self
     {
         parent::assignData($data);
 
@@ -128,12 +126,16 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         return $this;
     }
 
-    public function isInitializeNeeded()
+    public function isInitializeNeeded() : bool
     {
         return true;
     }
 
-    public function initialize($paymentAction, $stateObject) {
+    /**
+     * @param Order $stateObject
+     */
+    public function initialize($paymentAction, $stateObject) : self {
+        /** @var Payment $payment */
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
         $order->setCanSendNewEmailFlag(false);
@@ -142,31 +144,36 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         $stateObject->setState(Order::STATE_NEW);
         $stateObject->setStatus($status);
         $stateObject->setIsNotified(false);
+
+        return $this;
     }
 
-    public function canRefund() {
+    public function canRefund() : bool {
         $method = $this->ccvOnlinePaymentsService->getMethodById($this->getCode());
-        return $method->isRefundSupported();
+        return $method?->isRefundSupported() ?? false;
     }
 
-    public function canRefundPartialPerInvoice() {
+    public function canRefundPartialPerInvoice() : bool {
         $method = $this->ccvOnlinePaymentsService->getMethodById($this->getCode());
-        return $method->isRefundSupported();
+        return $method?->isRefundSupported() ?? false;
     }
 
-    public function refund(InfoInterface $payment, $amount)
+    /**
+     * @param Payment $payment
+     * @param float $amount
+     */
+    public function refund(InfoInterface $payment, $amount) : self
     {
         $refundRequest = new RefundRequest();
         $refundRequest->setAmount($amount);
 
-        /** @var CreditmemoInterface $creditMemoInterface */
         $creditMemoInterface = $payment->getCreditmemo();
 
-        /** @var InvoiceInterface $invoice */
+        /** @var Order\Invoice $invoice */
         $invoice = $creditMemoInterface->getInvoice();
         $refundRequest->setReference($invoice->getTransactionId());
 
-        $refundRequest->setOrderLines($this->getOrderlinesByInvoice($creditMemoInterface));
+        $refundRequest->setOrderLines($this->getOrderlinesByInvoice($invoice));
 
         try {
             $refundResponse = $this->ccvOnlinePaymentsService->getApi()->createRefund($refundRequest);
@@ -177,13 +184,16 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         return $this;
     }
 
-    public function canVoid()
+    public function canVoid() : bool
     {
         $method = $this->ccvOnlinePaymentsService->getMethodById($this->getCode());
-        return $method->isTransactionTypeAuthoriseSupported();
+        return $method?->isTransactionTypeAuthoriseSupported() ?? false;
     }
 
-    public function void(InfoInterface $payment)
+    /**
+     * @param Payment $payment
+     */
+    public function void(InfoInterface $payment) : self
     {
         $reversalRequest = new ReversalRequest();
         $reversalRequest->setReference($payment->getCcvonlinepaymentsReference());
@@ -197,16 +207,20 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         return $this;
     }
 
-    private function getOrderlinesByInvoice($invoice) {
+    /**
+     * @param Order\Invoice $invoice
+     * @return array<OrderLine>
+     */
+    private function getOrderlinesByInvoice(Order\Invoice $invoice) : array {
         $orderLines = [];
 
         foreach($invoice->getItems() as $item) {
             $totalPrice = $item->getRowTotal() - $item->getDiscountAmount() + $item->getTaxAmount() + $item->getDiscountTaxCompensationAmount();
             if(abs($totalPrice) > 0.0001) {
                 $orderLine = new OrderLine();
-                $orderLine->setType(OrderLine::TYPE_PHYSICAL);
+                $orderLine->setType(OrderLineType::PHYSICAL);
                 $orderLine->setName($item->getName());
-                $orderLine->setQuantity(round($item->getQty()));
+                $orderLine->setQuantity(intval(round($item->getQty())));
                 if($orderLine->getQuantity() < 1) {
                     $orderLine->setQuantity(1);
                 }
@@ -223,7 +237,7 @@ class Method extends \Magento\Payment\Model\Method\Adapter {
         $totalShippingAmount = $invoice->getShippingAmount() + $invoice->getShippingTaxAmount() + $invoice->getShippingDiscountTaxCompensationAmount();
         if($totalShippingAmount > 0) {
             $orderLine = new \CCVOnlinePayments\Lib\OrderLine();
-            $orderLine->setType(\CCVOnlinePayments\Lib\OrderLine::TYPE_SHIPPING_FEE);
+            $orderLine->setType(OrderLineType::SHIPPING_FEE);
             $orderLine->setName("Shipping");
             $orderLine->setQuantity(1);
             $orderLine->setTotalPrice($totalShippingAmount);

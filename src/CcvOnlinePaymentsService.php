@@ -1,58 +1,41 @@
 <?php namespace CCVOnlinePayments\Magento;
 
 use CCVOnlinePayments\Lib\CcvOnlinePaymentsApi;
+use CCVOnlinePayments\Lib\Enum\OrderLineType;
+use CCVOnlinePayments\Lib\Enum\TransactionType;
 use CCVOnlinePayments\Lib\Method;
-use Magento\Checkout\Model\ConfigProviderInterface;
+use CCVOnlinePayments\Lib\PaymentResponse;
+use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\AppInterface;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use CCVOnlinePayments\Lib\OrderLine;
 use CCVOnlinePayments\Lib\PaymentRequest;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 
 class CcvOnlinePaymentsService
 {
+    private const VERSION = "1.8.0";
 
-    private const VERSION = "1.6.2";
-
-    private $config;
-    private $cache;
-    private $logger;
-    private $moduleList;
-    private $urlInterface;
-    private $localeResolver;
-    private $countryInformation;
-    private $orderPaymentRepository;
-    private $orderRepository;
-
-    private $api = null;
+    private ?CcvOnlinePaymentsApi $api = null;
 
     public function __construct(
-        ScopeConfigInterface $config,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Psr\Log\LoggerInterface $logger,
-        ModuleListInterface $moduleList,
-        OrderPaymentRepositoryInterface $orderPaymentRepository,
-        OrderRepositoryInterface $orderRepostiory,
-        ResolverInterface $localeResolver,
-        CountryInformationAcquirerInterface $countryInformation,
-        \Magento\Framework\Url $urlInterface
+        private readonly ScopeConfigInterface $config,
+        private readonly \Magento\Framework\App\CacheInterface $cache,
+        private readonly \Psr\Log\LoggerInterface $logger,
+        private readonly OrderPaymentRepositoryInterface $orderPaymentRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly ResolverInterface $localeResolver,
+        private readonly CountryInformationAcquirerInterface $countryInformation,
+        private readonly \Magento\Framework\Url $urlInterface
     )
     {
-        $this->config                   = $config;
-        $this->cache                    = $cache;
-        $this->logger                   = $logger;
-        $this->moduleList               = $moduleList;
-        $this->localeResolver           = $localeResolver;
-        $this->countryInformation       = $countryInformation;
-        $this->orderPaymentRepository   = $orderPaymentRepository;
-        $this->orderRepository          = $orderRepostiory;
-        $this->urlInterface             = $urlInterface;
+
     }
 
 
@@ -66,7 +49,7 @@ class CcvOnlinePaymentsService
             $this->api = new CcvOnlinePaymentsApi(new Cache($this->cache), $this->logger, $apiKey);
             $this->api->setMetadata([
                 "CCVOnlinePayments" => self::VERSION,
-                "Magento"           => $productMetadata->getVersion()
+                "Magento"           => strval($productMetadata?->getVersion())
             ]);
         }
 
@@ -87,11 +70,15 @@ class CcvOnlinePaymentsService
         return null;
     }
 
-    public function startTransaction(Order $order, array $metadata) {
+    /**
+     * @param array<string,string> $metadata
+     */
+    public function startTransaction(Order $order, array $metadata) : PaymentResponse {
         $ccvOnlinePaymentsApi = $this->getApi();
 
         $ccvOnlinePaymentsApi->addMetadata($metadata);
 
+        /** @var Order\Payment $payment */
         $payment = $order->getPayment();
         $methodId = str_replace("ccvonlinepayments_","",$payment->getMethod());
         if($methodId === "paybylink") {
@@ -99,6 +86,9 @@ class CcvOnlinePaymentsService
         }
 
         $method = $ccvOnlinePaymentsApi->getMethodById($methodId);
+        if($method === null) {
+            throw new \Exception("Method not found");
+        }
 
         $paymentRequest = new PaymentRequest();
         $paymentRequest->setCurrency($order->getOrderCurrencyCode());
@@ -115,9 +105,9 @@ class CcvOnlinePaymentsService
         }
 
         if($method->isTransactionTypeAuthoriseSupported()) {
-            $paymentRequest->setTransactionType(PaymentRequest::TRANSACTION_TYPE_AUTHORIZE);
+            $paymentRequest->setTransactionType(TransactionType::AUTHORIZE);
         }else{
-            $paymentRequest->setTransactionType(PaymentRequest::TRANSACTION_TYPE_SALE);
+            $paymentRequest->setTransactionType(TransactionType::SALE);
         }
 
         $paymentRequest->setReturnUrl($this->urlInterface->getUrl('ccvonlinepayments/checkout/paymentreturn/',["_scope" => $order->getStoreId(),"_scope_to_url" => true,"order_id" => $order->getIncrementId(), "payment_id" => $payment->getId()]));
@@ -141,38 +131,50 @@ class CcvOnlinePaymentsService
             $paymentRequest->setBrand($additionalInformation['selectedIssuer'] ?? null);
         }
 
-        $paymentRequest->setScaReady(false);
+        /** @var ?AbstractAddress $billingAddress */
+        $billingAddress = $order->getBillingAddress();
+        if($billingAddress === null) {
+            throw new \Exception("Billing address not found");
+        }
 
-        $billingCountryCode = $this->countryInformation->getCountryInfo($order->getBillingAddress()->getCountryId())->getTwoLetterAbbreviation();
-        $paymentRequest->setBillingEmail($order->getBillingAddress()->getEmail());
-        $paymentRequest->setBillingFirstName($order->getBillingAddress()->getFirstName());
-        $paymentRequest->setBillingLastName($order->getBillingAddress()->getLastName());
-        $paymentRequest->setBillingAddress($order->getBillingAddress()->getStreetLine(1));
-        $paymentRequest->setBillingCity($order->getBillingAddress()->getCity());
-        $paymentRequest->setBillingPostalCode($order->getBillingAddress()->getPostcode());
+        $billingCountryCode = $this->countryInformation->getCountryInfo($billingAddress->getCountryId())->getTwoLetterAbbreviation();
+        $paymentRequest->setBillingEmail($billingAddress->getEmail());
+        $paymentRequest->setBillingFirstName($billingAddress->getFirstName());
+        $paymentRequest->setBillingLastName($billingAddress->getLastName());
+        $paymentRequest->setBillingAddress($billingAddress->getStreetLine(1));
+        $paymentRequest->setBillingCity($billingAddress->getCity());
+        $paymentRequest->setBillingPostalCode($billingAddress->getPostcode());
         $paymentRequest->setBillingCountry($billingCountryCode);
-        $paymentRequest->setBillingState($order->getBillingAddress()->getRegionCode());
-        $paymentRequest->setBillingPhoneNumber($order->getBillingAddress()->getTelephone());
+        $paymentRequest->setBillingState($billingAddress->getRegionCode());
+        $paymentRequest->setBillingPhoneNumber($billingAddress->getTelephone());
 
-        $shippingCountryCode = $this->countryInformation->getCountryInfo($order->getShippingAddress()->getCountryId())->getTwoLetterAbbreviation();
-        $paymentRequest->setShippingEmail($order->getShippingAddress()->getEmail());
-        $paymentRequest->setShippingFirstName($order->getShippingAddress()->getFirstName());
-        $paymentRequest->setShippingLastName($order->getShippingAddress()->getLastName());
-        $paymentRequest->setShippingAddress($order->getShippingAddress()->getStreetLine(1));
-        $paymentRequest->setShippingCity($order->getShippingAddress()->getCity());
-        $paymentRequest->setShippingPostalCode($order->getShippingAddress()->getPostcode());
+        /** @var ?AbstractAddress $shippingAddress */
+        $shippingAddress = $order->getShippingAddress();
+        if($shippingAddress === null) {
+            throw new \Exception("Shipping address not found");
+        }
+
+        $shippingCountryCode = $this->countryInformation->getCountryInfo($shippingAddress->getCountryId())->getTwoLetterAbbreviation();
+        $paymentRequest->setShippingEmail($shippingAddress->getEmail());
+        $paymentRequest->setShippingFirstName($shippingAddress->getFirstName());
+        $paymentRequest->setShippingLastName($shippingAddress->getLastName());
+        $paymentRequest->setShippingAddress($shippingAddress->getStreetLine(1));
+        $paymentRequest->setShippingCity($shippingAddress->getCity());
+        $paymentRequest->setShippingPostalCode($shippingAddress->getPostcode());
         $paymentRequest->setShippingCountry($shippingCountryCode);
-        $paymentRequest->setShippingState($order->getShippingAddress()->getRegionCode());
-        $paymentRequest->setMerchantRiskIndicatorDeliveryEmailAddress($order->getShippingAddress()->getEmail());
+        $paymentRequest->setShippingState($shippingAddress->getRegionCode());
+        $paymentRequest->setMerchantRiskIndicatorDeliveryEmailAddress($shippingAddress->getEmail());
 
         if($order->getCustomer() !== null) {
             $paymentRequest->setAccountInfoAccountIdentifier($order->getCustomer()->getId());
-            $paymentRequest->setAccountInfoAccountCreationDate((new \DateTime())->setTimeStamp($order->getCustomer()->getCreatedAtTimestamp()));
+            $paymentRequest->setAccountInfoAccountCreationDate((new \DateTimeImmutable())->setTimeStamp($order->getCustomer()->getCreatedAtTimestamp()));
             $paymentRequest->setAccountInfoEmail($order->getCustomer()->getEmail());
         }
 
         $paymentRequest->setBrowserFromServer();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        /** @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remote */
         $remote = $objectManager->get('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress');
         $paymentRequest->setBrowserIpAddress($remote->getRemoteAddress());
 
@@ -192,15 +194,19 @@ class CcvOnlinePaymentsService
         return $paymentResponse;
     }
 
-    private function getOrderlinesByOrder(Order $order) {
+    /**
+     * @param Order $order
+     * @return array<OrderLine>
+     */
+    private function getOrderlinesByOrder(Order $order) : array {
         $orderLines = [];
 
         /** @var OrderItemInterface $visibleItem */
         foreach($order->getAllVisibleItems() as $visibleItem) {
             $orderLine = new OrderLine();
-            $orderLine->setType(OrderLine::TYPE_PHYSICAL);
+            $orderLine->setType(OrderLineType::PHYSICAL);
             $orderLine->setName($visibleItem->getName());
-            $orderLine->setQuantity(round($visibleItem->getQtyOrdered()));
+            $orderLine->setQuantity(intval(round($visibleItem->getQtyOrdered()??1)));
             $orderLine->setTotalPrice($visibleItem->getRowTotal() - $visibleItem->getDiscountAmount() + $visibleItem->getTaxAmount() + $visibleItem->getDiscountTaxCompensationAmount());
             $orderLine->setUnit("pcs");
             $orderLine->setUnitPrice($orderLine->getTotalPrice()/$orderLine->getQuantity());
@@ -212,7 +218,7 @@ class CcvOnlinePaymentsService
         $totalShippingAmount = $order->getShippingAmount() + $order->getShippingTaxAmount() + $order->getShippingDiscountTaxCompensationAmount();
         if($totalShippingAmount > 0) {
             $orderLine = new \CCVOnlinePayments\Lib\OrderLine();
-            $orderLine->setType(\CCVOnlinePayments\Lib\OrderLine::TYPE_SHIPPING_FEE);
+            $orderLine->setType(OrderLineType::SHIPPING_FEE);
             $orderLine->setName("Shipping");
             $orderLine->setQuantity(1);
             $orderLine->setTotalPrice($totalShippingAmount);

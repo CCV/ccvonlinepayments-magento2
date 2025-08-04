@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class CardVisa extends Method {
 
-    protected $_code = 'ccvonlinepayments_card_visa';
+    protected string $_code = 'ccvonlinepayments_card_visa';
 
 }

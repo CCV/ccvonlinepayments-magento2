@@ -13,21 +13,15 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;;
 class StartPayByLinkTransaction implements ObserverInterface
 {
 
-    private $ccvOnlinePaymentsService;
-    private $orderPaymentRepository;
-    private $orderSender;
-
     public function __construct(
-        CcvOnlinePaymentsService $ccvOnlinePaymentsService,
-        OrderPaymentRepositoryInterface $orderPaymentRepository,
-        OrderSender                     $orderSender
+        private readonly CcvOnlinePaymentsService $ccvOnlinePaymentsService,
+        private readonly OrderPaymentRepositoryInterface $orderPaymentRepository,
+        private readonly OrderSender                     $orderSender
     ) {
-        $this->ccvOnlinePaymentsService = $ccvOnlinePaymentsService;
-        $this->orderPaymentRepository   = $orderPaymentRepository;
-        $this->orderSender              = $orderSender;
+
     }
 
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer) : void
     {
         if (!$observer->hasData('order')) {
             return;

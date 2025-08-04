@@ -1,32 +1,36 @@
 <?php namespace CCVOnlinePayments\Magento\Controller\Checkout;
 
-use CCVOnlinePayments\Lib\PaymentStatus;
+use CCVOnlinePayments\Lib\Enum\PaymentStatus;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 class PaymentReturn extends Action {
 
-    use AbstractStatusHandlerTrait;
+    use AbstractStatusHandlerTrait, RedirectTrait;
 
-    public function execute()
+    public function execute() : ResultInterface
     {
         $paymentStatus = $this->handlePaymentStatus();
 
         if($paymentStatus === null) {
-            $this->session->restoreQuote();
+            $this->checkoutSession->restoreQuote();
             $this->messageManager->addErrorMessage(__("There was an unexpected error processing your payment"));
-            $this->_redirect('checkout/cart');
-        }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_SUCCESS) {
-            $this->session->start();
+            return $this->redirect('checkout/cart');
+        }elseif($paymentStatus->getStatus() === PaymentStatus::SUCCESS) {
+            $this->checkoutSession->start();
             $this->messageManager->addSuccessMessage(__('Your payment was successful.'));
-            $this->_redirect('checkout/onepage/success');
-        }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_PENDING) {
-            $this->session->start();
+            return $this->redirect('checkout/onepage/success');
+        }elseif($paymentStatus->getStatus() === PaymentStatus::PENDING || $paymentStatus->getStatus() === PaymentStatus::MANUAL_INTERVENTION) {
+            $this->checkoutSession->start();
             $this->messageManager->addWarningMessage(__('Your payment is still pending.'));
-            $this->_redirect('checkout/onepage/success');
-        }elseif($paymentStatus->getStatus() === PaymentStatus::STATUS_FAILED) {
-            $this->session->restoreQuote();
+            return $this->redirect('checkout/onepage/success');
+        }elseif($paymentStatus->getStatus() === PaymentStatus::FAILED) {
+            $this->checkoutSession->restoreQuote();
             $this->messageManager->addErrorMessage(__('There was an error processing the payment.'));
-            $this->_redirect('checkout/cart');
+            return $this->redirect('checkout/cart');
         }
+
+        throw new \Exception("Unexpected payment status");
     }
 }

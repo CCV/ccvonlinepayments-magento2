@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class Banktransfer extends Method {
 
-    protected $_code = 'ccvonlinepayments_banktransfer';
+    protected string $_code = 'ccvonlinepayments_banktransfer';
 
 }

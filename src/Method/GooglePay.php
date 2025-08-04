@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class GooglePay extends Method {
 
-    protected $_code = 'ccvonlinepayments_googlepay';
+    protected string $_code = 'ccvonlinepayments_googlepay';
 
 }

@@ -6,7 +6,7 @@ class PayByLink extends Info {
 
     protected $_template = 'CCVOnlinePayments_Magento::info/paybylink.phtml';
 
-    public function getPaymentLink() {
+    public function getPaymentLink() : mixed {
         return $this->getInfo()->getAdditionalInformation("ccvPayUrl");
     }
 }

@@ -4,10 +4,12 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class PaymentDataBuilder implements BuilderInterface
 {
+
     /**
-     * @inheritdoc
+     * @param array<mixed> $buildSubject
+     * @return array<mixed>
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject) : array
     {
         $result = [];
 

@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class CardMaestro extends Method {
 
-    protected $_code = 'ccvonlinepayments_card_maestro';
+    protected string $_code = 'ccvonlinepayments_card_maestro';
 
 }

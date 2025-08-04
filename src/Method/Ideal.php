@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class Ideal extends Method {
 
-    protected $_code = 'ccvonlinepayments_ideal';
+    protected string $_code = 'ccvonlinepayments_ideal';
 
 }

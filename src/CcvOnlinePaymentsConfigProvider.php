@@ -7,18 +7,17 @@ use Magento\Framework\View\Asset\Repository;
 
 class CcvOnlinePaymentsConfigProvider implements ConfigProviderInterface
 {
-    private $config;
-    private $ccvOnlinePaymentsService;
-    private $assetRepository;
-
-    public function __construct(ScopeConfigInterface $config, CcvOnlinePaymentsService $ccvOnlinePaymentsService, Repository $assetRepository)
+    public function __construct(
+        private readonly CcvOnlinePaymentsService $ccvOnlinePaymentsService,
+        private readonly Repository $assetRepository)
     {
-        $this->config                   = $config;
-        $this->ccvOnlinePaymentsService = $ccvOnlinePaymentsService;
-        $this->assetRepository          = $assetRepository;
+
     }
 
-   public function getConfig() {
+    /**
+     * @return array{'payment': mixed}
+     */
+   public function getConfig() : array {
         $config = [
             "payment" => []
         ];

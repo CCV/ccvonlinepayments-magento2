@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class CardAmex extends Method {
 
-    protected $_code = 'ccvonlinepayments_card_amex';
+    protected string $_code = 'ccvonlinepayments_card_amex';
 
 }

@@ -2,6 +2,6 @@
 
 class Klarna extends Method {
 
-    protected $_code = 'ccvonlinepayments_klarna';
+    protected string $_code = 'ccvonlinepayments_klarna';
 
 }

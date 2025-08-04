@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class Paypal extends Method {
 
-    protected $_code = 'ccvonlinepayments_paypal';
+    protected string $_code = 'ccvonlinepayments_paypal';
 
 }

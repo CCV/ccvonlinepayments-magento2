@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class Sofort extends Method {
 
-    protected $_code = 'ccvonlinepayments_sofort';
+    protected string $_code = 'ccvonlinepayments_sofort';
 
 }

@@ -7,24 +7,13 @@ use Magento\Store\Model\ScopeInterface;
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
 
-    private $scopeConfig;
-
-    private $methodCode;
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string|null $methodCode
-     * @param string $pathPattern
-     */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        ?\Magento\Checkout\Model\Session $checkoutSession,
-        $methodCode = null,
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly ?string $methodCode = null,
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
-        $this->scopeConfig = $scopeConfig;
-        $this->methodCode = $methodCode;
+
     }
 
     public function getValue($field, $storeId = null)

@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class Giropay extends Method {
 
-    protected $_code = 'ccvonlinepayments_giropay';
+    protected string $_code = 'ccvonlinepayments_giropay';
 
 }

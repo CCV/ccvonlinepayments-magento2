@@ -10,6 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class ApplePay extends Method {
 
-    protected $_code = 'ccvonlinepayments_applepay';
+    protected string $_code = 'ccvonlinepayments_applepay';
 
 }
