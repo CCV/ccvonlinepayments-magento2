@@ -7,7 +7,7 @@ CCV has developed a dedicated plugin that seamlessly integrates Magento 2 with C
 
 # Payment methods
 CCV makes the following payment methods available in this plugin: 
-- iDeal
+- iDEAL | Wero
 - Bancontact
 - Apple Pay
 - Google Pay

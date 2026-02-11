@@ -1,0 +1,19 @@
+"Your payment is still pending.","Your payment is still pending."
+"There was an error processing the payment.","There was an error processing the payment."
+"Choose your bank...","Choose your bank..."
+"Ccv Online Payments","Ccv Online Payments"
+General,General
+"Api Key","Api Key"
+"Pending status","Pending status"
+"Processing status","Processing status"
+Banktransfer,Banktransfer
+Enabled,Enabled
+Card,Card
+Eps,Eps
+Giropay,Giropay
+iDeal,iDEAL | Wero
+iDEAL | Wero,iDEAL | Wero
+Apple Pay,Apple Pay
+Paypal,Paypal
+Sofort,Sofort
+Klarna,Klarna

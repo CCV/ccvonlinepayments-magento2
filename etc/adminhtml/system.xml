@@ -23,7 +23,7 @@
                     </field>
                 </group>
                 <group id="ccvonlinepayments_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Ideal</label>
+                    <label>iDEAL | Wero</label>
                     <field id="active" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

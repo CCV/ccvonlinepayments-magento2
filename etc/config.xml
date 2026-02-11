@@ -3,7 +3,7 @@
         <payment>
             <ccvonlinepayments_ideal>
                 <model>CcvOnlinePaymentsMagentoMethodIdeal</model>
-                <title>iDeal</title>
+                <title>iDEAL | Wero</title>
                 <payment_action>authorize_capture</payment_action>
                 <is_gateway>0</is_gateway>
                 <can_order>1</can_order>
