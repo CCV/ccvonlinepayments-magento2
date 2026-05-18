@@ -10,6 +10,7 @@
                     <label>General</label>
                     <field id="api_key" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Api Key</label>
+                        <backend_model>CCVOnlinePayments\Magento\Model\Config\Backend\ApiKey</backend_model>
                     </field>
                     <field id="order_status_payment_pending" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Pending status</label>

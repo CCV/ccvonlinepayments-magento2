@@ -17,3 +17,7 @@ Apple Pay,Apple Pay
 Paypal,Paypal
 Sofort,Sofort
 Klarna,Klarna
+
+"The API Key is invalid.","The API Key is invalid."
+"Your ip has been blocked. Please contact CCV.","Your ip has been blocked. Please contact CCV."
+"An error (Http %1 error) has occurred. Please try again later or contact CCV.","An error (Http %1 error) has occurred. Please try again later or contact CCV."
